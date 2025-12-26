@@ -1,0 +1,142 @@
+<div class="container mt-4">
+  <h1 class="mb-4 text-center text-primary">Student Management System</h1>
+  
+  <!-- Error Message Display -->
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearError()"></button>
+  </div>
+  
+  <!-- Add Student Form -->
+  <div class="card mb-4 shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Add New Student</h3>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Student Name *</label>
+          <input type="text" class="form-control" 
+                 [(ngModel)]="newStudent.name" 
+                 placeholder="Enter student name"
+                 (click)="clearError()">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Age * (1-100)</label>
+          <input type="number" class="form-control" 
+                 [(ngModel)]="newStudent.age" 
+                 placeholder="Enter age" min="1" max="100"
+                 (click)="clearError()">
+        </div>
+      </div>
+      <button class="btn btn-success btn-lg" (click)="saveStudent()">
+        <i class="bi bi-plus-circle"></i> Save Student
+      </button>
+    </div>
+  </div>
+
+  <!-- Find Student by ID -->
+  <div class="card mb-4 shadow">
+    <div class="card-header bg-info text-white">
+      <h3 class="mb-0">Find Student by ID</h3>
+    </div>
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <input type="number" class="form-control" 
+                 [(ngModel)]="searchId" 
+                 placeholder="Enter student ID" min="1"
+                 (click)="clearError()">
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-info btn-lg" (click)="findStudentById()">
+            <i class="bi bi-search"></i> Find
+          </button>
+        </div>
+      </div>
+      
+      <!-- Display found student -->
+      <div *ngIf="selectedStudent" class="mt-4">
+        <div class="alert alert-success">
+          <h5><i class="bi bi-person-check"></i> Student Found</h5>
+          <hr>
+          <div class="row">
+            <div class="col-md-4">
+              <p><strong>ID:</strong> {{selectedStudent.id}}</p>
+            </div>
+            <div class="col-md-4">
+              <p><strong>Name:</strong> {{selectedStudent.name}}</p>
+            </div>
+            <div class="col-md-4">
+              <p><strong>Age:</strong> {{selectedStudent.age}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Display All Students -->
+  <div class="card shadow">
+    <div class="card-header bg-secondary text-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">All Students</h3>
+        <button class="btn btn-light btn-sm" (click)="getAllStudents()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh List
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div *ngIf="students.length === 0" class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-triangle"></i> No students found. Add your first student above!
+      </div>
+      
+      <div *ngIf="students.length > 0">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of students">
+                <td>{{student.id}}</td>
+                <td>{{student.name}}</td>
+                <td>{{student.age}}</td>
+                <td>
+                  <button class="btn btn-sm btn-info me-2" 
+                          (click)="searchId = student.id; findStudentById()">
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="mt-4 p-3 bg-light rounded">
+          <h5>Statistics</h5>
+          <div class="row text-center">
+            <div class="col">
+              <div class="display-6 text-primary">{{students.length}}</div>
+              <div class="text-muted">Total Students</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-4 text-center text-muted">
+    <p>Backend API: http://localhost:8080/student</p>
+    <p class="small">Click on any input field to clear error messages</p>
+  </div>
+</div>
+
+<router-outlet />
